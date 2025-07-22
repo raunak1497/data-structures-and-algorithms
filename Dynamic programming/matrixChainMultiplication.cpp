@@ -42,50 +42,45 @@ ll dp[1001][1001];
 //     }
 // }
 
-//Memoization 
-// int matrixChainMultiplication(ll a[],int i,int j){
-//     if(i>=j){
-//         return 0;
-//     }
-//     else{
-//         if(dp[i][j]!=-1){
-//             return dp[i][j];
+//Top down
+// int matrixChainMultiplication(ll a[],int n){
+//     for(int i= 0;i<n;i++){
+//         for(int j = 0;j<n;j++){
+//             if(i>=j || i==0)
+//                 dp[i][j] = 0;
 //         }
-//         else{
-//             int min = INT_MAX;
-//             for(int k =i;k<=j-1;k++){
-//                 int temp = matrixChainMultiplication(a,i,k) + matrixChainMultiplication(a,k+1,j) + a[i-1]*a[k]*a[j];
-//                 dp[i][j] = temp;
-//                 if(temp<min)
-//                     min = temp;
+//     }
+
+//     for(int i=n-1;i>=1;i--){
+//         for(int j=i+1;j<n;j++){
+//             ll cost = INT_MAX;
+//             for(int k = i; k<=j-1; k++){
+//                 cost = min((dp[i][k],dp[k+1][j]+ a[i-1]*a[k]*a[j]),cost);
 //             }
-//             return min;
+//             dp[i][j]=cost;
 //         }
-        
 //     }
+//     return dp[1][n-1];
 // }
 
-//Top down
-int matrixChainMultiplication(ll a[],int n){
-    for(int i= 0;i<n;i++){
-        for(int j = 0;j<n;j++){
-            if(i>=j || i==0)
-                dp[i][j] = 0;
-        }
+//Memoization 
+int matrixChainMultiplication(ll arr[],int i,int j){
+    if(i>= j){
+        return 0;
     }
 
-    for(int i=n-1;i>=1;i--){
-        for(int j=i+1;j<n;j++){
-            ll cost = INT_MAX;
-            for(int k = i; k<=j-1; k++){
-                cost = min((dp[i][k],dp[k+1][j]+ a[i-1]*a[k]*a[j]),cost);
-            }
-            dp[i][j]=cost;
-        }
+    if(dp[i][j] != -1){
+        return dp[i][j];
     }
-    return dp[1][n-1];
+    
+    dp[i][j] = INT_MAX;
+    for(int k = i;k<j;k++){
+        int temp = matrixChainMultiplication(arr,i,k) + matrixChainMultiplication(arr,k+1,j) + arr[i-1]*arr[k]*arr[j];
+        dp[i][j] =  min(dp[i][j],temp);
+    }
+
+    return dp[i][j];
 }
-
 
 int main() 
 { 
@@ -98,6 +93,6 @@ int main()
         cin >> a[i];
     memset(dp,-1,sizeof(dp));
     // cout<<matrixChainMultiplication(a,1,n-1)<<endl;
-    cout<<matrixChainMultiplication(a,n)<<endl;
+    cout<<matrixChainMultiplication(a,1,n-1)<<endl;
     return 0;
 }

@@ -25,19 +25,28 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
+vector<vector<string>> ans;
+
+bool isPalindrome(string s){
+    string r = s;
+    reverse(r.begin(),r.end());
+    return r == s;
+}
+
+void solve(string& s,int index, vector<string>&v){
+    if(index == s.size()){
+        ans.push_back(v);
+        return;
+    }
+
+    for(int i=index;i<s.size();i++){
+        string op = s.substr(index,i-index+1);
+        if(isPalindrome(op)){
+            v.push_back(op);
+            solve(s,i+1,v);
+            v.pop_back();
         }
-        return ans;
+    }
 }
 
 int main() 
@@ -46,6 +55,7 @@ int main()
     cin.tie(0);
     string s;
     cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    vector<string> v;
+    solve(s,0,v);
     return 0;
 }

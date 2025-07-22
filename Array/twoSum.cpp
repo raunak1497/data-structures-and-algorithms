@@ -25,17 +25,18 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
+vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int,int> mp;
+        int n = nums.size();
+        vector<int> ans;
+        for(int i=0;i<n;i++){
+            int diff = target-nums[i];
+            if(mp.find(diff) != mp.end() ){
+                return {mp[diff],i};
             }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
+            else{
+                mp.insert({nums[i],i});
+            }
         }
         return ans;
 }
@@ -44,8 +45,10 @@ int main()
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    int n;
+    cin >> n;
+    ll a[n];
+    FOR(i, n)
+        cin >> a[i];
     return 0;
 }

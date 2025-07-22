@@ -25,7 +25,7 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int dp[1001][1001];
+// int dp[1001][1001];
 //recursive
 // int longestCommonSubsequence(string x,string y, int n, int m){
 //     if(n==0 || m==0){
@@ -60,33 +60,59 @@ int dp[1001][1001];
 // }
 
 //Topdown
+// int longestCommonSubsequence(string x,string y, int n, int m){
+//     memset(dp,-1,sizeof(dp));
+//     for(int i=0;i<n+1;i++){
+//         dp[i][0]=0;
+//     }
+
+//     for(int j=0;j<m+1;j++){
+//         dp[0][j]=0;
+//     }
+
+//     for(int i=1;i<n+1;i++){
+//         for(int j=1;j<m+1;j++){
+//             if(x[i-1]==y[j-1]){
+//                 dp[i][j]= 1 + dp[i-1][j-1];
+//             }
+//             else{
+//                 dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+//             }
+//         }
+//     }
+//     return dp[n][m];
+// }
+
 int longestCommonSubsequence(string x,string y, int n, int m){
-    for(int i=0;i<n+1;i++){
-        dp[i][0]=0;
+    if(n>m){
+        return longestCommonSubsequence(y,x,m,n);
     }
 
-    for(int j=0;j<m+1;j++){
-        dp[0][j]=0;
+    int dp[m+1];
+    for(int i=0;i<=m;i++){
+        dp[i]=0;
     }
-
-    for(int i=1;i<n+1;i++){
-        for(int j=1;j<m+1;j++){
+    int prev;
+    for(int i=1;i<=n;i++){
+        prev=0;
+        for (int j = 1; j<=m; j++)
+        {
+            int temp = dp[j];
             if(x[i-1]==y[j-1]){
-                dp[i][j]= 1 + dp[i-1][j-1];
+                dp[j] = prev +1;
+            }else{
+                dp[j] = max(dp[j],dp[j-1]);
             }
-            else{
-                dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
-            }
+            prev = temp;
         }
     }
-    return dp[n][m];
+    return dp[m];
 }
 
 int main() 
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    memset(dp,-1,sizeof(dp));
     int n,m;
     string x,y;
     cin>>x;

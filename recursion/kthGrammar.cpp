@@ -25,27 +25,25 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
-        }
-        return ans;
+int kthGrammar(int n, int k) {
+    if(n==1 || k==1){
+        return 0;
+    }
+
+    int mid = pow(2,n-1)/2;
+    if(k<=mid){
+        return kthGrammar(n-1,k);
+    }else{
+        return !kthGrammar(n-1,k-mid);
+    }
 }
 
 int main() 
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    int n,k;
+    cin >> n >> k;
+    cout<<kthGrammar(n,k)<<endl;
     return 0;
 }

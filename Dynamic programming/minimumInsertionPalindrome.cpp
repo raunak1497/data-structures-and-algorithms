@@ -25,27 +25,44 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
+int dp[1001][1001];
+
+//Topdown
+int minimumInsertionPalindrome(string s){
     int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
+        string s2 = s;
+        reverse(s2.begin(),s2.end());
+        vector<vector<int> >dp(n+1,vector<int>(n+1,-1));
+        for(int i=0;i<n+1;i++){
+            dp[i][0]=0;
         }
-        return ans;
+
+        for(int j=0;j<n+1;j++){
+            dp[0][j]=0;
+        }
+
+        for(int i=1;i<n+1;i++){
+            for(int j=1;j<n+1;j++){
+                if(s[i-1]==s2[j-1]){
+                    dp[i][j] = 1 + dp[i-1][j-1];
+                }
+                else{
+                    dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        return n-dp[n][n];
 }
 
 int main() 
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    memset(dp,-1,sizeof(dp));
+    int n,m;
+    string x;
+    cin>>x;
+    n = x.size();
+    cout<<minimumInsertionPalindrome(x)<<endl;
     return 0;
 }

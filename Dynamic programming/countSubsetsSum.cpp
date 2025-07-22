@@ -27,34 +27,53 @@ typedef pair<int, int> pi;
  
 int dp[1001][1001];
 
+// //Topdown
+// int countSubsetSum(int k, int arr[],int n) 
+// {
+//     int count = 1;
+//     dp[0][0]=1;
+// 	// int mod = (int)1e9+7;
+
+// 	for(int i=1;i<n+1;i++){
+// 		if(arr[i]==0){
+// 			dp[i][0] = dp[i-1][0]*2;
+// 		}
+// 		else{
+// 			dp[i][0] = dp[i-1][0];
+// 		}
+// 		for(int j=1;j<k+1;j++){
+// 			dp[i][j] = dp[i-1][j];
+// 			if(arr[i-1]<=j){
+// 				dp[i][j] += dp[i-1][j-arr[i-1]];
+// 			}
+// 		}
+// 	}
+
+// 	return dp[n][k];
+// }
+
 //Topdown
 int countSubsetSum(int k, int arr[],int n) 
 {
-    int count = 1;
-    dp[0][0]=1;
-	for(int i=0;i<n;i++){
-		if(arr[i]==0){
-			count*=2;
-			dp[i+1][0] = count;
-		}
-		else{
-			dp[i+1][0] = dp[i][0];
-		}
-	}
+    int dp1[k+1];
+	memset(dp1,0,sizeof(dp1));
 	// int mod = (int)1e9+7;
+	dp1[0]=1;
 
 	for(int i=1;i<n+1;i++){
-		for(int j=1;j<k+1;j++){
-			if(arr[i-1]<=j){
-				dp[i][j] = (dp[i-1][j-arr[i-1]] + dp[i-1][j]) % mod;
+		int num = arr[i];
+		if(num==0){
+			for(int j=k;j>=0;j--){
+				dp1[j] *= 2;
 			}
-			else{
-				dp[i][j] = dp[i-1][j];
+		}else{
+			for(int j=k;j>=num;j--){
+				dp1[j] += dp1[j-num];
 			}
 		}
+		
 	}
-
-	return dp[n][k];
+	return dp1[k];
 }
 
 int main() 

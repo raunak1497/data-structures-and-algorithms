@@ -2,6 +2,7 @@
 #include <vector>
 #include <queue>
 #include <set>
+#include <unordered_set>
 #include <map>
 #include <string>
 #include <utility>
@@ -25,19 +26,29 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
+void solve(int index,string& s,vector<string> &ans,string output, unordered_map<string,int>& mp){
+    if(index == s.size()){
+        ans.push_back(output);
+        return;
+    }
+    
+    for(int i=index;i<s.size();i++){
+        string op = s.substr(index,i-index+1);
+        if(mp.find(op) != mp.end()){
+            string new_current = output.empty() ? op : output + " " + op;
+            solve(i + 1, s, ans, new_current, mp);
         }
-        return ans;
+    }
+}
+
+vector<string> wordBreak(string s,vector<string>& dict){
+    unordered_map<string,int> mp;
+    vector<string> ans;
+    for(int i=0;i<dict.size();i++){
+            mp[dict[i]]++;
+    }
+    solve(0,s,ans,"",mp);
+    return ans;
 }
 
 int main() 
@@ -46,6 +57,7 @@ int main()
     cin.tie(0);
     string s;
     cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    vector<string> dict;
+    wordBreak(s,dict);
     return 0;
 }

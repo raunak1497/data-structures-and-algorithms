@@ -25,19 +25,31 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
-        }
-        return ans;
+void allPermutation(string s, string op,int index, set<string>& ans){
+    if(s.size()==index){
+        ans.insert(op);
+        return;
+    }
+    string op1 = op+s[index];
+    string op2 = op+s[index];
+    if(index != s.size()-1){
+        op2+=" ";
+    }
+    allPermutation(s,op2,index+1,ans);
+    allPermutation(s,op1,index+1,ans);
+    
+    return;
+}
+vector<string> permutation(string s) {
+    // Code Here
+    set<string> v;
+    string op = "";
+    allPermutation(s,op,0,v);
+    vector<string> ans;
+    for(string s1 : v){
+        ans.push_back(s1);
+    }
+    return ans;
 }
 
 int main() 
@@ -45,7 +57,11 @@ int main()
     ios::sync_with_stdio(0);
     cin.tie(0);
     string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    vector<string> ans;
+    cin >> s;
+    ans = permutation(s);
+    for(string s1 : ans){
+        cout<<s1<<endl;
+    }
     return 0;
 }

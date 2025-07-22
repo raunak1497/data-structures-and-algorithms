@@ -56,63 +56,42 @@ bool isPalindrome(string s, int i, int j){
 // }
 
 //memoization
-// int palindromicPartition(string s, int i, int j){
-//     if(i>=j){
-//         return dp[i][j] = 0;
-//     }
-//     if(dp[i][j]!=-1){
-//         return dp[i][j];
-//     }
-//     if(isPalindrome(s,i,j))
-//         return dp[i][j] = 0;
-//     else{
-//         int ans = INT_MAX,temp;
-//         for(int k=i;k<j;k++ ){
-//             temp = palindromicPartition(s,i,k) + palindromicPartition(s,k+1,j)+1;
-//             ans = min(ans,temp);
-//         }
-//         return dp[i][j] = ans;
-//     }
-// }
-
-//bottom up
 int palindromicPartition(string s, int i, int j){
-    if(i>=j){
-        return dp[i][j] = 0;
+    if(i>j){
+        return 0;
     }
 
     if(isPalindrome(s,i,j)){
-        return dp[i][j] = 0;
+        return 0;
     }
 
-    if(dp[i][j]!=-1){
+    if(dp[i][j] != -1){
         return dp[i][j];
     }
 
-    int ans = INT_MAX;
-    for(int k=i;k<j;k++){
-        int left,right,temp;
-        if(dp[i][k]!=-1){
+    dp[i][j] =  INT_MAX;
+    for(int k = i;k<j;k++){
+         int left,right;
+        if(dp[i][k]!= -1){
             left = dp[i][k];
         }
         else{
-            dp[i][k] = palindromicPartition(s,i,k);
-            left = dp[i][k];
+            left = palindromicPartition(s,i,k);
         }
 
-        if(dp[k+1][j]!=-1){
+        if(dp[k+1][j]!= -1){
             right = dp[k+1][j];
         }
         else{
-            dp[k+1][j] = palindromicPartition(s,k+1,j);
-            right = dp[k+1][j];
+            right = palindromicPartition(s,k+1,j);
         }
-        temp = 1+ left+right;
-        ans = min(ans,temp);
+        int temp = left + right + 1;
+        dp[i][j] = min(dp[i][j],temp);
     }
 
-    return dp[i][j]=ans;
+    return dp[i][j];
 }
+
 
 int main() 
 { 

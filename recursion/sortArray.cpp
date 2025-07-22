@@ -24,28 +24,39 @@ typedef pair<int, int> pi;
 #define pb push_back
 #define pob pop_back
 #define mp make_pair
-
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
-            }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
-        }
-        return ans;
+void insert(vector<int>& v,int val){
+    if(v.size()==0 || v[v.size()-1] <= val){
+        v.push_back(val);
+        return;
+    }
+    int temp = v[v.size()-1];
+    v.pop_back();
+    insert(v,val);
+    v.push_back(temp); 
+    return;
 }
-
+void sort(vector<int>& v){
+    if(v.size()==1){
+        return; 
+    }
+    int val = v[v.size()-1];
+    v.pop_back();
+    sort(v);
+    insert(v,val);
+    return;
+}
 int main() 
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    int n;
+    cin >> n;
+    ll a[n];
+    vector<int> v(n);
+    FOR(i, n)
+        cin >> v[i];
+    sort(v);
+    FOR(i, n)
+        cout<<v[i]<<" ";
     return 0;
 }

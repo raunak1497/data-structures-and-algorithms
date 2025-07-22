@@ -25,27 +25,36 @@ typedef pair<int, int> pi;
 #define pob pop_back
 #define mp make_pair
 
-int longestSubarraySum(string s){
-    int n = s.size();
-        set<char> st;
-        int i =0,ans=0;
-       for(int j=0;j<n;j++){
-            while(st.find(s[j]) != st.end()){
-                st.erase(s[i]);
-                i++;
+void dfs(vector<vector<int>>& adj,vector<bool>& visited,int s){
+        visited[s] = true;
+        
+        for(auto x : adj[s]){
+            if(!visited[x]){
+                visited[x] = true;
+                dfs(adj,visited,x);
             }
-            st.insert(s[j]);
-            ans = max(ans,j-i+1);
         }
-        return ans;
+
 }
 
 int main() 
 { 
     ios::sync_with_stdio(0);
     cin.tie(0);
-    string s;
-    cin>>s;
-    cout<<longestSubarraySum(s)<<endl;
+    vector<vector<int> > edgeList = {{1,2},{2,3},{3,4},{4,2},{1,3}};
+
+    // Adjacency List representation of the graph
+    unordered_map<int , vector<int> > graph;
+    for(int i=0;i<edgeList.size();i++){
+        int a  = edgeList[i][0];
+        int b = edgeList[i][1];
+       graph[a].push_back(b);
+       graph[b].push_back(a);
+    }
+    int n = edgeList.size();
+    vector<bool> visited(n,false);
+    dfs(adj,visited,source);
+
+    return visited[destination];
     return 0;
 }
